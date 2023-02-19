@@ -9,9 +9,9 @@ import java.sql.SQLException;
 public class ClientRowMapper implements RowMapper<Client> {
     @Override
     public Client mapRow(ResultSet rs, int rowNum) throws SQLException {
-        Client client = new Client();
-        client.setId(rs.getLong("id"));
-        client.setNickname(rs.getString("nickname"));
+        Client client = new Client(
+                rs.getLong("id"),
+                rs.getString("nickname"));
 
         return client;
     }

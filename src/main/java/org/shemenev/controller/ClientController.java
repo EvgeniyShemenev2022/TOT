@@ -1,11 +1,15 @@
 package org.shemenev.controller;
 
 import org.shemenev.DAO.ClientDAO;
-import org.shemenev.exceptions.IncorrectDataHandler;
+import org.shemenev.exceptions.MyAppException;
 import org.shemenev.model.Client;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.web.ErrorResponseException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -31,18 +35,18 @@ public class ClientController {
 
     @PostMapping
     public Long addNewClient(@RequestBody Client newClient) {
-
         return clientDAO.addClient(newClient);
     }
 
     @GetMapping("/{id}")
     public Client getClient(@PathVariable long id) {
-
-        if (clientDAO.getClient(id) == null){
-            throw new IncorrectDataHandler("There is no employee with ID = " + id);
+        Optional<Client> clientOptional = clientDAO.getClient(id);
+        if (clientOptional.isPresent()) {
+            return clientOptional.get();
         }
-
-        return clientDAO.getClient(id);
+        var exc = new ErrorResponseException(HttpStatusCode.valueOf(408));
+        exc.setDetail("Пользователь не найден: id=" + id);
+        throw exc;
     }
 
 
@@ -70,7 +74,6 @@ public class ClientController {
     public String getMessage() {
         return "HOHOHO";
     }
-
 
 
 }

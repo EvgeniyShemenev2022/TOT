@@ -1,5 +1,6 @@
 package org.shemenev.config;
 
+import org.shemenev.DAO.ClientDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -10,14 +11,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import javax.sql.DataSource;
 
 @Configuration
-public class DbConfig{
-
-    private final ApplicationContext applicationContext;
-
-    @Autowired
-    public DbConfig(ApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
-    }
+public class DbConfig {
 
     @Bean
     public DataSource sqlDataSource() {
@@ -30,10 +24,16 @@ public class DbConfig{
         return dataSource;
     }
 
-     @Bean
-     public NamedParameterJdbcTemplate namedParameterJdbcTemplate(){
-         return new NamedParameterJdbcTemplate(sqlDataSource());
-     }
+
+    @Bean
+    public NamedParameterJdbcTemplate namedParameterJdbcTemplate(DataSource dataSource) {
+        return new NamedParameterJdbcTemplate(dataSource);
+    }
+
+    @Bean
+    public ClientDAO clientDAO(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+        return new ClientDAO(namedParameterJdbcTemplate);
+    }
 
 
 }

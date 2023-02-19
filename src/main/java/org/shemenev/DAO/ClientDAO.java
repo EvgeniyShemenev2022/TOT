@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
 import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -23,14 +24,12 @@ import java.util.List;
  * 6.
  * 7.
  */
-@Repository
 public class ClientDAO implements ClientDAOInterface {
 
 
     // выгоднее использовать, когда у сущности много параметров
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    @Autowired
     public ClientDAO(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
@@ -45,11 +44,17 @@ public class ClientDAO implements ClientDAOInterface {
 
     // using RowMapper
     @Override
-    public Client getClient(long id) {
+    public Optional<Client> getClient(long id) {
         String sql = "select * from client where client.id = :id";
         SqlParameterSource sqlParameterSource = new MapSqlParameterSource("id", id);
+        return Optional.ofNullable(namedParameterJdbcTemplate.queryForObject(
+                sql, sqlParameterSource, new ClientRowMapper()));
+//        if(client == null) {
+//            return Optional.empty();
+//        }
+//        return Optional.of(client);
 
-        return namedParameterJdbcTemplate.queryForObject(sql, sqlParameterSource, new ClientRowMapper());
+//        return Optional.ofNullable(client);
     }
 
     @Override

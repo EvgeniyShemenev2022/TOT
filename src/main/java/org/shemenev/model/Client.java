@@ -14,10 +14,12 @@ public class Client {
 
     private String nickname;
 
-    public Client() {
+    public Client(String nickname) {
+        this.nickname = nickname;
     }
 
-    public Client(String nickname) {
+    public Client(long id, String nickname) {
+        this.id = id;
         this.nickname = nickname;
     }
 
@@ -25,16 +27,8 @@ public class Client {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
     public String getNickname() {
         return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
     }
 
     @Override
