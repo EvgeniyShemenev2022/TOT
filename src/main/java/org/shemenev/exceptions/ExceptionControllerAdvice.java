@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class ExceptionControllerAdvice {
 
-    @ExceptionHandler(value = {IncorrectDataHandler.class})
-    public ResponseEntity<IncorrectData> handleException(IncorrectDataHandler handler){
+    @ExceptionHandler(value = {MyAppException.class})
+    public ResponseEntity<IncorrectData> handleException(MyAppException handler){
 
         IncorrectData incorrectData = new IncorrectData();
         incorrectData.setInfo(handler.getMessage());
